@@ -13,21 +13,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/* Route::get('/', function () {
-    return view('welcome');
-}); */
 
 Auth::routes();
 
-Route::middleware('auth')->namespace('Admin')->name('admin.')->prefix('admin')->group(function() {
+
+Route::middleware('auth')->prefix('admin')->namespace('Admin')->name('admin.')->group(function () {
     Route::get('/', 'HomeController@index')->name('dashboard');
+    Route::resource('posts', 'PostController')->parameters([
+        'posts' => 'post:slug'
+    ]);
 });
 
 
 
-
-
-
+// Va inserita come ultima rotta, al fine di "catturare" la view guest.home se non lo sono le precedenti
 Route::get("{any?}", function () {
     return view("guest.home");
 })->where("any", ".*");
